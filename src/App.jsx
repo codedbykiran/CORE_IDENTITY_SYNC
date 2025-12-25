@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Terminal, ExternalLink, Cpu, Binary, ShieldAlert, FolderOpen, FileCode, Lock, Database, Zap, Activity, BarChart3, Fingerprint, Globe, Code2 } from 'lucide-react';
 
-// --- HEX-DECRYPT COMPONENT (FOR NAME) ---
+// --- HEX-DECRYPT COMPONENT ---
 const DecryptText = ({ text }) => {
   const [displayText, setDisplayText] = useState("");
   const chars = "0101X7F#$";
@@ -133,28 +133,64 @@ export default function UltimateHybrid() {
             </header>
 
             <div className="flex-1 flex gap-4 overflow-hidden">
+              
+              {/* --- THE BADASS LEFT SIDEBAR --- */}
               <aside className="w-64 hidden xl:flex flex-col gap-4">
-                <div className="cyber-panel flex-1 p-6 flex flex-col justify-between">
-                  <div className="space-y-8">
-                    <span className="text-[8px] opacity-30 tracking-[4px] block font-bold uppercase italic">Data_Flow_Matrix</span>
-                    <div className="relative h-44 w-full flex items-end gap-1 px-1">
-                      {[...Array(14)].map((_, i) => (
-                        <motion.div 
-                          key={i}
-                          animate={{ height: [30, 90, 50, 100, 30].map(h => `${h}%`) }}
-                          transition={{ repeat: Infinity, duration: 2, delay: i * 0.1 }}
-                          className="flex-1 bg-cyan-500/10 border-t border-cyan-500/40 shadow-[0_0_5px_rgba(34,211,238,0.2)]"
-                        />
-                      ))}
+                <div className="cyber-panel flex-1 p-4 flex flex-col gap-6 relative overflow-hidden">
+                  
+                  {/* 1. GREEN BINARY STREAM (Matrix Rain Style) */}
+                  <div className="h-40 overflow-hidden relative border border-green-500/20 rounded bg-green-500/[0.02]">
+                    <div className="absolute inset-0 text-[8px] text-green-500/40 leading-none p-1 break-all opacity-50">
+                      <motion.div animate={{ y: [0, -100] }} transition={{ repeat: Infinity, duration: 8, ease: "linear" }}>
+                        {[...Array(30)].map((_, i) => (
+                          <div key={i} className="mb-1">101101011000101101010111010101101101011000101101010111010101</div>
+                        ))}
+                      </motion.div>
+                    </div>
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+                      <div className="text-center">
+                        <span className="text-[9px] font-bold text-green-400 tracking-[2px] block uppercase">Live_Encryption</span>
+                        <div className="flex justify-center gap-1 mt-1">
+                           <div className="w-1 h-1 bg-green-500 rounded-full animate-ping" />
+                           <div className="w-1 h-1 bg-green-500 rounded-full animate-ping delay-75" />
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div className="pt-6 border-t border-white/5 flex flex-col items-center gap-2">
-                    <Fingerprint size={28} className="text-cyan-500/30" />
-                    <span className="text-[7px] opacity-20 tracking-[4px] uppercase font-bold">User_Authorized</span>
+
+                  {/* 2. RED BREACH ALERT SECTION */}
+                  <motion.div 
+                    animate={{ borderColor: ["rgba(239,68,68,0.1)", "rgba(239,68,68,0.5)", "rgba(239,68,68,0.1)"] }}
+                    transition={{ repeat: Infinity, duration: 1.5 }}
+                    className="p-4 bg-red-500/[0.04] border border-red-500/30 rounded relative"
+                  >
+                    <div className="flex items-center gap-2 mb-2 text-red-500">
+                      <ShieldAlert size={14} className="animate-pulse" />
+                      <span className="text-[9px] font-bold uppercase tracking-widest">Breach_Detected</span>
+                    </div>
+                    <div className="space-y-1 font-bold">
+                       <div className="text-[7px] text-red-400/70 uppercase tracking-tighter"> {'>'} UNAUTHORIZED_UID_66</div>
+                       <div className="text-[7px] text-red-400/70 uppercase tracking-tighter"> {'>'} ORIGIN: 127.0.0.1</div>
+                    </div>
+                  </motion.div>
+
+                  {/* 3. CYAN SECURITY SCANNER (Rotating Hex) */}
+                  <div className="flex-1 flex flex-col justify-end">
+                    <div className="relative h-28 flex items-center justify-center">
+                       <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 5, ease: "linear" }} className="absolute w-20 h-20 border-2 border-cyan-500/20 rounded-full border-dashed" />
+                       <motion.div animate={{ rotate: -360 }} transition={{ repeat: Infinity, duration: 3, ease: "linear" }} className="absolute w-14 h-14 border-t-2 border-b-2 border-cyan-400/40 rounded-lg" />
+                       <Cpu size={24} className="absolute text-cyan-400 animate-pulse" />
+                    </div>
+                    <div className="mt-4 pt-6 border-t border-white/5 flex flex-col items-center">
+                       <Fingerprint size={28} className="text-cyan-500/20" />
+                       <span className="text-[7px] tracking-[4px] opacity-20 uppercase mt-2 font-bold">Auth_Confirmed</span>
+                    </div>
                   </div>
+
                 </div>
               </aside>
 
+              {/* --- MAIN CONTENT (UNCHANGED AS PER REQUEST) --- */}
               <main className="flex-1 flex flex-col gap-4 overflow-hidden">
                 <section className="cyber-panel p-10 md:p-14 relative overflow-hidden group border-r-4 border-cyan-500/30">
                   <div className="absolute top-0 right-0 p-8 opacity-[0.02] rotate-12"><Globe size={220} /></div>
@@ -168,7 +204,6 @@ export default function UltimateHybrid() {
                        <DecryptText text="KIRAN CHARHATE" />
                     </h1>
 
-                    {/* --- DESCRIPTION WITH LIVE CODE BLOCK --- */}
                     <div className="max-w-4xl bg-black/50 p-6 border-l-2 border-cyan-400/50 rounded-r-lg font-mono relative">
                       <div className="absolute top-2 right-4 text-[8px] opacity-20 flex gap-2">
                         <span className="text-cyan-500">JS_ENGINE</span>
@@ -189,7 +224,7 @@ export default function UltimateHybrid() {
                 </section>
 
                 <section className="flex-1 cyber-panel p-8 overflow-y-auto scrollbar-hide">
-                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {projects.map((p, idx) => (
                         <motion.div 
                           key={idx}
@@ -205,7 +240,7 @@ export default function UltimateHybrid() {
                           <ExternalLink size={18} className="text-cyan-500 opacity-20 group-hover:opacity-100 transition-all" />
                         </motion.div>
                       ))}
-                   </div>
+                    </div>
                 </section>
               </main>
             </div>
