@@ -1,263 +1,225 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Terminal, ExternalLink, Cpu, Binary, ShieldAlert, FolderOpen, FileCode, Lock, Database, Zap, Activity, BarChart3, Fingerprint, Globe, Code2 } from 'lucide-react';
+import { Terminal, Zap, X, Activity, Cpu, Code2, Globe2, ShieldAlert, ChevronRight, Binary, Scan } from 'lucide-react';
 
-// --- HEX-DECRYPT COMPONENT ---
-const DecryptText = ({ text }) => {
-  const [displayText, setDisplayText] = useState("");
-  const chars = "0101X7F#$";
+// --- 🕸️ THE NEURAL WEB ENGINE (BEYOND NEXT LEVEL) ---
+const NeuralWeb = ({ mouse }) => {
+  const canvasRef = useRef(null);
   useEffect(() => {
-    let iteration = 0;
-    const interval = setInterval(() => {
-      setDisplayText(text.split("").map((letter, index) => {
-        if (index < iteration) return text[index];
-        return chars[Math.floor(Math.random() * chars.length)];
-      }).join(""));
-      if (iteration >= text.length) clearInterval(interval);
-      iteration += 1/3;
-    }, 30);
-    return () => clearInterval(interval);
-  }, [text]);
-  return <span className="font-bold">{displayText}</span>;
-};
-
-// --- TYPEWRITER ENGINE ---
-const Typewriter = ({ text, delay = 20 }) => {
-  const [currentText, setCurrentText] = useState("");
-  const [currentIndex, setCurrentIndex] = useState(0);
-  useEffect(() => {
-    if (currentIndex < text.length) {
-      const timeout = setTimeout(() => {
-        setCurrentText(prev => prev + text[currentIndex]);
-        setCurrentIndex(prev => prev + 1);
-      }, delay);
-      return () => clearTimeout(timeout);
-    }
-  }, [currentIndex, delay, text]);
-  return (
-    <span>
-      {currentText}
-      <motion.span animate={{ opacity: [1, 0] }} transition={{ repeat: Infinity, duration: 0.8 }} className="inline-block w-2 h-4 bg-cyan-400 ml-1 align-middle shadow-[0_0_8px_#22d3ee]" />
-    </span>
-  );
-};
-
-export default function UltimateHybrid() {
-  const [isBooted, setIsBooted] = useState(false);
-  const [bootLogs, setBootLogs] = useState([]);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-
-  useEffect(() => {
-    const logs = [
-      "INITIALIZING_V8_KERNEL_LOADER...",
-      "CHECKING_SYSTEM_INTEGRITY... OK",
-      "MOUNTING_LOCAL_FILESYSTEM_SECTOR_07",
-      "ALLOCATING_MEMORY_0x7F22A",
-      "BYPASSING_PUNE_RELAY_0x7",
-      "ESTABLISHING_SECURE_HANDSHAKE",
-      "LOADING_CORE_MODULES: [REACT, FRAMER]",
-      "DECRYPTING_BIO_METRICS...",
-      "OPTIMIZING_V8_ENGINE_PERFORMANCE",
-      "SYNCING_NEURAL_INTERFACE_ASSETS",
-      "STARTING_TERMINAL_INTERFACE...",
-      "WELCOME_BACK_KIRAN_CHARHATE",
-      "GOD_MODE_ACTIVE"
-    ];
-    let i = 0;
-    const interval = setInterval(() => {
-      if (i < logs.length) {
-        setBootLogs(prev => [...prev, logs[i]]);
-        i++;
-      } else {
-        clearInterval(interval);
-        setTimeout(() => setIsBooted(true), 800);
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    let w, h, particles = [];
+    
+    const init = () => {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+      particles = [];
+      for(let i = 0; i < 120; i++) {
+        particles.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          vx: (Math.random() - 0.5) * 1.5,
+          vy: (Math.random() - 0.5) * 1.5,
+        });
       }
-    }, 150);
-    return () => clearInterval(interval);
-  }, []);
+    };
 
-  const handleMouseMove = (e) => {
-    setMousePos({ x: (e.clientX / window.innerWidth - 0.5) * 15, y: (e.clientY / window.innerHeight - 0.5) * 15 });
-  };
+    const draw = () => {
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = '#010204';
+      ctx.fillRect(0, 0, w, h);
+      
+      particles.forEach((p, i) => {
+        p.x += p.vx;
+        p.y += p.vy;
+
+        if(p.x < 0 || p.x > w) p.vx *= -1;
+        if(p.y < 0 || p.y > h) p.vy *= -1;
+
+        // Mouse Attraction
+        const mDist = Math.sqrt((mouse.x - p.x)**2 + (mouse.y - p.y)**2);
+        if(mDist < 200) {
+          p.x += (mouse.x - p.x) * 0.02;
+          p.y += (mouse.y - p.y) * 0.02;
+        }
+
+        ctx.fillStyle = 'rgba(34, 211, 238, 0.8)';
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 1.5, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Line Connections
+        for(let j = i + 1; j < particles.length; j++) {
+          const p2 = particles[j];
+          const dist = Math.sqrt((p.x - p2.x)**2 + (p.y - p2.y)**2);
+          if(dist < 150) {
+            ctx.strokeStyle = `rgba(34, 211, 238, ${1 - dist/150})`;
+            ctx.lineWidth = 0.5;
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.stroke();
+          }
+        }
+      });
+      requestAnimationFrame(draw);
+    };
+
+    init(); draw();
+    window.addEventListener('resize', init);
+    return () => window.removeEventListener('resize', init);
+  }, [mouse]);
+
+  return <canvas ref={canvasRef} className="absolute inset-0 z-0 pointer-events-none" />;
+};
+
+export default function ArchitectVoid() {
+  const [showVault, setShowVault] = useState(false);
+  const [mouse, setMouse] = useState({ x: 0, y: 0 });
+  const [activeId, setActiveId] = useState(null);
 
   const projects = [
-    { name: "INFINITE-WIKI", link: "https://codedbykiran.github.io/Infinite-Wki/", tech: "V8_ENGINE" },
-    { name: "STEP-COUNTER", link: "https://codedbykiran.github.io/live-Step-Counter/", tech: "NEURAL_SYNC" },
-    { name: "FITNESS-LOG", link: "https://codedbykiran.github.io/Fitness-Progress-Visualizer/", tech: "DATA_VAULT" },
-    { name: "PEXEL-PERFECT", link: "https://codedbykiran.github.io/PexelPerfect---Photo-Editor/", tech: "VISION_CORE" }
+    { name: "INFINITE-WIKI", id: "01", tag: "//DATA_MINING", color: "#22d3ee", link: "https://codedbykiran.github.io/Infinite-Wki/" },
+    { name: "STEP-COUNTER", id: "02", tag: "//BIO_RECON", color: "#f472b6", link: "https://codedbykiran.github.io/live-Step-Counter/" },
+    { name: "FITNESS-LOG", id: "03", tag: "//VITAL_LOG", color: "#a78bfa", link: "https://codedbykiran.github.io/Fitness-Progress-Visualizer/" },
+    { name: "PEXEL-PERFECT", id: "04", tag: "//OPTIC_SYNTH", color: "#fbbf24", link: "https://codedbykiran.github.io/PexelPerfect---Photo-Editor/" }
   ];
 
   return (
-    <div onMouseMove={handleMouseMove} className="h-screen w-screen bg-[#020305] text-slate-400 overflow-hidden relative font-mono cursor-crosshair">
+    <div 
+      onMouseMove={(e) => setMouse({ x: e.clientX, y: e.clientY })}
+      className="h-screen w-screen bg-[#010204] text-white overflow-hidden relative font-mono cursor-none"
+    >
+      <NeuralWeb mouse={mouse} />
       
-      <motion.div style={{ x: mousePos.x, y: mousePos.y }} className="absolute inset-0 opacity-[0.08] pointer-events-none">
-        <div className="absolute inset-0" style={{ backgroundImage: `radial-gradient(circle at 1px 1px, #22d3ee 1px, transparent 0)`, backgroundSize: '45px 45px' }} />
-      </motion.div>
+      {/* BACKGROUND DATA STREAM */}
+      <div className="absolute top-0 right-0 p-10 opacity-10 text-[8px] leading-tight select-none pointer-events-none">
+        {Array(20).fill(0).map((_, i) => (
+          <div key={i}>0x{Math.random().toString(16).slice(2, 10).toUpperCase()} - SYNC_OK</div>
+        ))}
+      </div>
 
-      <style>
-        {`@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@300;400;700&display=swap');
-          * { font-family: 'Source Code Pro', monospace !important; }
-          .cyber-panel { background: rgba(5, 7, 10, 0.9); border: 1px solid rgba(34, 211, 238, 0.1); border-radius: 4px; backdrop-filter: blur(10px); }
-          .glow-cyan { text-shadow: 0 0 10px rgba(34, 211, 238, 0.5); }
-        `}
-      </style>
+      <div className="relative z-10 h-full w-full flex flex-col justify-between p-10">
+        
+        {/* HEADER */}
+        <header className="flex justify-between items-start">
+          <div className="space-y-2">
+            <div className="flex items-center gap-3">
+               <Binary className="text-cyan-500" size={16} />
+               <span className="text-[10px] tracking-[10px] font-black uppercase">Architect_Kiran_v9.0</span>
+            </div>
+            <div className="h-[1px] w-full bg-gradient-to-r from-cyan-500 to-transparent opacity-30" />
+          </div>
+          <div className="flex gap-4 items-center border border-white/10 px-4 py-2 bg-black/50 backdrop-blur-md">
+             <Scan size={14} className="animate-pulse text-red-500" />
+             <span className="text-[9px] tracking-[4px] uppercase">Secure_Session_Active</span>
+          </div>
+        </header>
 
-      <AnimatePresence>
-        {!isBooted ? (
-          <motion.div exit={{ opacity: 0, scale: 1.05 }} className="absolute inset-0 z-[100] bg-black p-10 flex flex-col justify-start">
-             <div className="mb-6 flex items-center gap-4">
-                <div className="h-[2px] w-10 bg-red-600 animate-pulse" />
-                <span className="text-red-600 font-bold text-[10px] tracking-[6px] uppercase">Unauthorized_Access_Log</span>
-             </div>
-             <div className="space-y-1">
-               {bootLogs.map((log, idx) => (
-                  <div key={idx} className="text-[10px] md:text-[11px] tracking-[2px] uppercase flex gap-4 opacity-60 font-bold">
-                    <span className="text-cyan-500 opacity-40">[{new Date().getMilliseconds()}ms]</span>
-                    <span className={idx === bootLogs.length - 1 ? "text-white opacity-100 glow-cyan" : ""}>{log}</span>
-                  </div>
-               ))}
-             </div>
-             <div className="w-2 h-4 bg-cyan-400 mt-6 animate-pulse" />
-          </motion.div>
-        ) : (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="h-full p-4 flex flex-col gap-4 relative z-10">
+        {/* CENTER MONOLITH */}
+        <main className="relative">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="flex flex-col items-start"
+          >
+            <h2 className="text-cyan-500 text-[10px] tracking-[20px] uppercase font-black mb-6 pl-2 border-l-2 border-cyan-500">
+              Developer & Architect
+            </h2>
+            <h1 className="text-[12vw] font-black leading-none tracking-tighter uppercase mb-4 group relative">
+              <span className="relative z-10">KIRAN</span>
+              <span className="absolute inset-0 text-cyan-500 blur-2xl opacity-0 group-hover:opacity-30 transition-opacity">KIRAN</span>
+              <br />
+              <span className="italic opacity-50">CHARHATE</span>
+            </h1>
             
-            <header className="h-14 cyber-panel flex items-center justify-between px-10 border-t-2 border-cyan-500/20">
-              <div className="flex items-center gap-6">
-                <div className="flex flex-col">
-                  <span className="text-[10px] font-bold tracking-[8px] text-white uppercase">Neural_Uplink_Established</span>
-                  <span className="text-[8px] text-cyan-500/50 uppercase tracking-[2px]">Core_V8_Stable</span>
-                </div>
-              </div>
-              <Zap size={18} className="text-cyan-400 animate-pulse" />
-            </header>
+            <div className="flex gap-8 mt-12 items-center">
+               <motion.button
+                 onClick={() => setShowVault(true)}
+                 whileHover={{ scale: 1.05 }}
+                 className="bg-white text-black px-10 py-5 font-black text-[11px] tracking-[8px] uppercase flex items-center gap-4 hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] transition-all"
+               >
+                 Open_Vault <Zap size={14} fill="black" />
+               </motion.button>
+               <span className="text-[9px] max-w-[200px] opacity-30 leading-relaxed italic uppercase">
+                 Decrypting the boundary between reality and digital art.
+               </span>
+            </div>
+          </motion.div>
+        </main>
 
-            <div className="flex-1 flex gap-4 overflow-hidden">
-              
-              {/* --- THE BADASS LEFT SIDEBAR --- */}
-              <aside className="w-64 hidden xl:flex flex-col gap-4">
-                <div className="cyber-panel flex-1 p-4 flex flex-col gap-6 relative overflow-hidden">
-                  
-                  {/* 1. GREEN BINARY STREAM (Matrix Rain Style) */}
-                  <div className="h-40 overflow-hidden relative border border-green-500/20 rounded bg-green-500/[0.02]">
-                    <div className="absolute inset-0 text-[8px] text-green-500/40 leading-none p-1 break-all opacity-50">
-                      <motion.div animate={{ y: [0, -100] }} transition={{ repeat: Infinity, duration: 8, ease: "linear" }}>
-                        {[...Array(30)].map((_, i) => (
-                          <div key={i} className="mb-1">101101011000101101010111010101101101011000101101010111010101</div>
-                        ))}
-                      </motion.div>
-                    </div>
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/40">
-                      <div className="text-center">
-                        <span className="text-[9px] font-bold text-green-400 tracking-[2px] block uppercase">Live_Encryption</span>
-                        <div className="flex justify-center gap-1 mt-1">
-                           <div className="w-1 h-1 bg-green-500 rounded-full animate-ping" />
-                           <div className="w-1 h-1 bg-green-500 rounded-full animate-ping delay-75" />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+        {/* FOOTER STATS */}
+        <footer className="flex justify-between items-end border-t border-white/5 pt-8 text-[8px] tracking-[6px] uppercase opacity-40">
+           <div className="space-y-1">
+              <p>Loc: 18.5204° N, 73.8567° E</p>
+              <p>Status: All Systems Functional</p>
+           </div>
+           <div className="text-right">
+              <p>Built with Neural Engines</p>
+              <p>© 2025_CORE_ACCESS</p>
+           </div>
+        </footer>
+      </div>
 
-                  {/* 2. RED BREACH ALERT SECTION */}
-                  <motion.div 
-                    animate={{ borderColor: ["rgba(239,68,68,0.1)", "rgba(239,68,68,0.5)", "rgba(239,68,68,0.1)"] }}
-                    transition={{ repeat: Infinity, duration: 1.5 }}
-                    className="p-4 bg-red-500/[0.04] border border-red-500/30 rounded relative"
-                  >
-                    <div className="flex items-center gap-2 mb-2 text-red-500">
-                      <ShieldAlert size={14} className="animate-pulse" />
-                      <span className="text-[9px] font-bold uppercase tracking-widest">Breach_Detected</span>
-                    </div>
-                    <div className="space-y-1 font-bold">
-                       <div className="text-[7px] text-red-400/70 uppercase tracking-tighter"> {'>'} UNAUTHORIZED_UID_66</div>
-                       <div className="text-[7px] text-red-400/70 uppercase tracking-tighter"> {'>'} ORIGIN: 127.0.0.1</div>
-                    </div>
-                  </motion.div>
-
-                  {/* 3. CYAN SECURITY SCANNER (Rotating Hex) */}
-                  <div className="flex-1 flex flex-col justify-end">
-                    <div className="relative h-28 flex items-center justify-center">
-                       <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 5, ease: "linear" }} className="absolute w-20 h-20 border-2 border-cyan-500/20 rounded-full border-dashed" />
-                       <motion.div animate={{ rotate: -360 }} transition={{ repeat: Infinity, duration: 3, ease: "linear" }} className="absolute w-14 h-14 border-t-2 border-b-2 border-cyan-400/40 rounded-lg" />
-                       <Cpu size={24} className="absolute text-cyan-400 animate-pulse" />
-                    </div>
-                    <div className="mt-4 pt-6 border-t border-white/5 flex flex-col items-center">
-                       <Fingerprint size={28} className="text-cyan-500/20" />
-                       <span className="text-[7px] tracking-[4px] opacity-20 uppercase mt-2 font-bold">Auth_Confirmed</span>
-                    </div>
-                  </div>
-
-                </div>
-              </aside>
-
-              {/* --- MAIN CONTENT (UNCHANGED AS PER REQUEST) --- */}
-              <main className="flex-1 flex flex-col gap-4 overflow-hidden">
-                <section className="cyber-panel p-10 md:p-14 relative overflow-hidden group border-r-4 border-cyan-500/30">
-                  <div className="absolute top-0 right-0 p-8 opacity-[0.02] rotate-12"><Globe size={220} /></div>
-                  <motion.div initial={{ x: -20, opacity: 0 }} animate={{ x: 0, opacity: 1 }}>
-                    <div className="flex items-center gap-3 mb-6 opacity-30">
-                       <Activity size={14} className="text-cyan-500" />
-                       <span className="text-[9px] tracking-[6px] font-bold uppercase italic">Active_V8_Session</span>
-                    </div>
-
-                    <h1 className="text-3xl md:text-5xl font-bold text-white tracking-[12px] uppercase mb-10 glow-cyan">
-                       <DecryptText text="KIRAN CHARHATE" />
-                    </h1>
-
-                    <div className="max-w-4xl bg-black/50 p-6 border-l-2 border-cyan-400/50 rounded-r-lg font-mono relative">
-                      <div className="absolute top-2 right-4 text-[8px] opacity-20 flex gap-2">
-                        <span className="text-cyan-500">JS_ENGINE</span>
-                        <span>v8.4.2</span>
-                      </div>
-                      <div className="text-[13px] md:text-[14px] text-slate-300 leading-relaxed tracking-[1px]">
-                         <span className="text-blue-400">class</span> <span className="text-yellow-400">Architect</span> {'{'} <br/>
-                         &nbsp;&nbsp;<span className="text-purple-400 italic">constructor</span>() {'{'} <br/>
-                         &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-blue-400 italic">this</span>.<span className="text-cyan-400">mission</span> = <span className="text-green-300">"</span>
-                         <Typewriter text="engineering high-performance digital ecosystems with core expertise in v8-engine logic. bridging the void between raw architectural data and seamless cinematic experiences." />
-                         <span className="text-green-300">"</span>;<br/>
-                         &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-blue-400 italic">this</span>.<span className="text-cyan-400">status</span> = <span className="text-red-500">"REDACTED"</span>;<br/>
-                         &nbsp;&nbsp;{'}'} <br/>
-                         {'}'}
-                      </div>
-                    </div>
-                  </motion.div>
-                </section>
-
-                <section className="flex-1 cyber-panel p-8 overflow-y-auto scrollbar-hide">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {projects.map((p, idx) => (
-                        <motion.div 
-                          key={idx}
-                          onClick={() => window.open(p.link, '_blank')}
-                          whileHover={{ scale: 1.02, x: 5, backgroundColor: 'rgba(34,211,238,0.05)' }}
-                          className="group p-6 border border-white/5 bg-white/[0.01] cursor-pointer flex justify-between items-center relative transition-all rounded"
-                        >
-                          <div className="flex flex-col gap-1 z-10">
-                             <span className="text-[8px] text-cyan-500/60 font-bold tracking-[4px]">MODULE_0{idx+1}</span>
-                             <span className="text-[18px] text-white font-bold group-hover:text-cyan-400 transition-colors uppercase tracking-[1.5px]">{p.name}</span>
-                             <span className="text-[7px] opacity-20 font-bold uppercase mt-2 tracking-[2px]">{p.tech}</span>
-                          </div>
-                          <ExternalLink size={18} className="text-cyan-500 opacity-20 group-hover:opacity-100 transition-all" />
-                        </motion.div>
-                      ))}
-                    </div>
-                </section>
-              </main>
+      {/* --- DIMENSIONAL OVERLAY (THE VAULT) --- */}
+      <AnimatePresence>
+        {showVault && (
+          <motion.div 
+            initial={{ opacity: 0, backdropFilter: 'blur(0px)' }}
+            animate={{ opacity: 1, backdropFilter: 'blur(30px)' }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 z-[100] bg-black/90 flex flex-col p-10 md:p-24"
+          >
+            <div className="flex justify-between items-center mb-20">
+               <div className="flex items-center gap-6">
+                  <div className="w-16 h-[2px] bg-cyan-500" />
+                  <h2 className="text-5xl font-black italic tracking-tighter uppercase">Memory_Sectors</h2>
+               </div>
+               <X onClick={() => setShowVault(false)} className="cursor-pointer hover:rotate-90 transition-all text-white border border-white/20 p-5 rounded-full" size={60} />
             </div>
 
-            <footer className="h-10 cyber-panel flex items-center justify-between px-10 border-b border-cyan-500/20">
-               <div className="flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-ping" />
-                  <span className="text-[9px] font-bold tracking-[8px] text-cyan-400/60 uppercase">System_Active_v8</span>
-               </div>
-               <div className="text-[9px] opacity-30 flex gap-6 font-bold tracking-[2px]">
-                 <span>{new Date().toLocaleTimeString()}</span>
-                 <span className="hidden sm:block">MH_PUNE_NODE</span>
-               </div>
-            </footer>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+               {projects.map((p, idx) => (
+                 <motion.div 
+                   key={idx}
+                   onMouseEnter={() => setActiveId(p.id)}
+                   onMouseLeave={() => setActiveId(null)}
+                   onClick={() => window.open(p.link, '_blank')}
+                   whileHover={{ y: -15, scale: 1.02 }}
+                   className="relative h-[450px] border border-white/10 bg-white/[0.02] p-10 flex flex-col justify-between cursor-pointer group transition-all duration-500"
+                 >
+                    <div className="flex justify-between items-start overflow-hidden h-12">
+                       <span className="text-6xl font-black text-white/5 group-hover:text-white/20 transition-all italic">{p.id}</span>
+                       <Activity size={20} className={`transition-all duration-500 ${activeId === p.id ? 'opacity-100' : 'opacity-0'}`} style={{ color: p.color }} />
+                    </div>
+                    
+                    <div>
+                       <h3 className="text-3xl font-black text-white mb-3 group-hover:text-cyan-400 transition-colors uppercase italic leading-none">{p.name}</h3>
+                       <p className="text-[10px] font-bold tracking-[4px] text-white/20 uppercase">{p.tag}</p>
+                    </div>
+
+                    <div className="h-1 w-full bg-white/5 overflow-hidden">
+                       <motion.div 
+                         initial={{ x: '-100%' }}
+                         animate={activeId === p.id ? { x: '0%' } : { x: '-100%' }}
+                         className="h-full w-full"
+                         style={{ backgroundColor: p.color }}
+                       />
+                    </div>
+                 </motion.div>
+               ))}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* --- CUSTOM NEURAL CURSOR --- */}
+      <motion.div 
+        animate={{ x: mouse.x - 10, y: mouse.y - 10 }}
+        className="fixed w-5 h-5 border border-cyan-500 z-[9999] pointer-events-none mix-blend-difference flex items-center justify-center"
+      >
+         <div className="w-1 h-1 bg-white rounded-full animate-ping" />
+      </motion.div>
     </div>
   );
 }
